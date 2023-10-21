@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+  <title>Login Form</title>
+  <style>
+    .container {
+      width: 300px;
+      padding: 16px;
+      background-color: #f2f2f2;
+      margin: 0 auto;
+      margin-top: 100px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    .msgBox{
+            background-color: #f2f2f2;
+            color:red;
+            width: 300px;
+            padding: 16px;
+            margin: 0 auto;
+            margin-top: 100px;
+     }
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+    input[type=submit] {
+      background-color: #4CAF50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      cursor: pointer;
+      width: 100%;
+    }
+    input[type=submit]:hover {
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+      <form action="/home/Login" method="post">
+            <label for="username"><b>Username</b></label>
+            <input type="text" placeholder="Enter Username" name="Username" required>
+
+            <label for="password"><b>Password</b></label>
+            <input type="password" placeholder="Enter Password" name="Password" required>
+
+            <input type="submit" id="submit" value="Login">
+      </form>
+  </div>
+    <div class="msgBox"> @ViewData["failMsg"]</div>
+</body>
+</html>

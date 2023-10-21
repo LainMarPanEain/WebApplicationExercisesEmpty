@@ -1,0 +1,36 @@
+﻿<body>
+    <h1>Employee Multi Entry</h1>
+    <form action="/Employee/MultiEntry" method="post">
+        <div>
+            <label for="id1">ID:</label>
+            <input type="text" id="id1" name="id">
+            <label for="name1">Name:</label>
+            <input type="text" id="name1" name="name">
+        </div>
+
+        <div>
+            <label for="id2">ID:</label>
+            <input type="text" id="id2" name="id">
+            <label for="name2">Name:</label>
+            <input type="text" id="name2" name="name">
+        </div>
+
+        <div>
+            <label for="id3">ID:</label>
+            <input type="text" id="id3" name="id">
+            <label for="name3">Name:</label>
+            <input type="text" id="name3" name="name">
+        </div>
+        <br>
+        <input type="submit" value="Submit">
+    </form>
+    @if (ViewBag.Ids != null && ViewBag.Names != null)
+    {
+        <div>
+            @foreach (string record in ViewBag.Records)
+            {
+                <b>@record</b><br>
+            }
+        </div>
+    }
+</body>

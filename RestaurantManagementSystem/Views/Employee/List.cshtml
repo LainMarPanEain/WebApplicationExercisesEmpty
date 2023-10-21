@@ -1,0 +1,57 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿
+@model IList<EmployeeViewModel>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<h1>Employee Information </h1>
+<hr />
+@if (TempData["Msg"] != null)
+{
+    <div class="text-info">
+        <b>@TempData["Msg"] </b>
+    </div>
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Code</th>
+            <th scope="col">Name</th>
+            <th scope="col">Position</th>
+            <th scope="col">Nrc</th>
+            <th scope="col">Email</th>
+            <th scope="col">Phone</th>
+            <th scope="col">Address</th>
+            <th scope="col">Gender</th>
+            <th scope="col">Date Of Birth</th>
+            <th scope="col">Join Date</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int index = 1;
+        }
+        @foreach (var employee in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@employee.Code</td>
+                <td>@employee.Name</td>
+                <td>@employee.Position.Name</td>
+                <td>@employee.Nrc </td>
+                <td>@employee.Email</td>
+                <td>@employee.Phone</td>
+                <td>@employee.Address</td>
+                <td>@employee.Gender</td>
+                <td>@employee.DOB.ToShortDateString()</td>
+                <td>@employee.JoinedDate.ToShortDateString()</td>
+                <td>
+                    <a href="/employee/edit?Id=@employee.Id" class="btn btn-success" role="button">edit</a>
+                    <a href="/employee/delete?Id=@employee.Id" onclick=" return confirm('are you sure to delete this record?');" class="btn btn-danger" role="button">delete</a>
+                </td>
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>

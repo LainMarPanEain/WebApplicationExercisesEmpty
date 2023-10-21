@@ -1,0 +1,50 @@
+﻿<h1>Registration Form</h1>
+
+<form action="/Account/Register" method="post">
+    <div>
+        <label for="Name">Name:</label>
+        <input type="text" name="Name" required>
+    </div>
+
+    <div>
+        <label for="Email">Email:</label>
+        <input type="email" name="Email" required>
+    </div>
+
+    <div>
+        <label for="Password">Password:</label>
+        <input type="password" name="Password" required>
+    </div>
+
+    <div>
+        <label for="ConfirmPassword">Confirm Password:</label>
+        <input type="password" name="ConfirmPassword" required>
+    </div>
+
+    <div>
+        <label for="Gender">Gender:</label>
+        <select name="Gender" required>
+            <option value="">Select Gender</option>
+            <option value="Male">Male</option>
+            <option value="Female">Female</option>
+            <option value="Other">Other</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="DateOfBirth">Date of Birth:</label>
+        <input type="date" name="DateOfBirth" required>
+    </div>
+
+    <div>
+        <label for="City">City:</label>
+        <input type="text" name="City" required>
+    </div>
+
+    <div>
+        <label for="Address">Address:</label>
+        <textarea name="Address" required></textarea>
+    </div>
+
+    <input type="submit" value="Register">
+</form>

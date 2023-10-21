@@ -1,0 +1,33 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <h1>Add New Position</h1>
+    <div class="text-success">
+        @if (ViewBag.Msg != null)
+        {
+            @ViewBag.Msg
+        }
+    </div>
+    <form action="/Position/Entry" method="post">
+        <div class="mb-3">
+            <label class="form-label" for="Code">Position Code:</label>
+            <input class="form-control" type="text" id="Code" name="Code" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Name">Name:</label>
+            <input class="form-control" type="text" id="Name" name="Name" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="BasicSalary">Basic Salary:</label>
+            <input class="form-control" type="number" id="BasicSalary" name="BasicSalary" required>
+        </div>
+
+        <input class="btn btn-success" type="submit" value="Entry">
+    </form>
+</body>
+</html>

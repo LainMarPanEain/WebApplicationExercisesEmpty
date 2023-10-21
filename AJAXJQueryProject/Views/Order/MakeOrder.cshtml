@@ -1,0 +1,36 @@
+﻿<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<form>
+    <h1>Making an Order</h1>
+    <p>
+        <label>Order ID</label>
+        <input type="text" id="orderId" />
+    </p>
+    <p>
+        <label>Order Quantity</label>
+        <input type="text" id="orderQty" />
+    </p>
+    <p>
+        <button id="btnMakeOrder">Order Now</button>
+    </p>
+</form>
+<script>
+    $("#btnMakeOrder").click(function(event){
+        event.preventDefault();
+        var anOrder={}; //javascript obj
+        anOrder.Id=$("#orderId").val();
+        anOrder.Qty=$("#orderQty").val();
+        var url = "/Order/MakeOrder";
+        $.ajax({
+            type:"POST",
+            url:url,
+            data:anOrder,
+            success:function(response){
+                var data=JSON.stringify(response);
+                alert(data);
+            },
+            failure:function(error){console.log(error)}
+        });
+    });
+</script>

@@ -1,0 +1,66 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿﻿
+
+@model IList<TablesViewModel>
+<head>
+    <link href="~/lib/datatables/css/datatables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/lib/datatables/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<h1>Tables Information </h1>
+<hr />
+@if (TempData["Msg"] != null)
+{
+    <div class="text-info">
+        <b>@TempData["Msg"] </b>
+    </div>
+}
+<table class="table" id="tablesTable">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Table Number</th>
+            <th scope="col">Table Available</th>
+            <th scope="col">Available Person</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th scope="col">Actions</th>
+            }
+            
+            
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int index = 1;
+        }
+        @foreach (var tables in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@tables.No</td>
+                <td>@tables.IsAvailable</td>
+                <td>@tables.AvailablePerson</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a href="/tables/edit?Id=@tables.Id" class="btn btn-success" role="button">edit</a>
+                        <a href="/tables/delete?Id=@tables.Id" onclick=" return confirm('are you sure to delete this record?');" class="btn btn-danger" role="button">delete</a>
+                    </td>
+                }
+                
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#tablesTable").dataTable();
+    });
+
+</script>
+@section Scripts{
+    <script src="~/lib/datatables.net/jquery.datatables.min.js"></script>
+    <script src="~/lib/datatables/js/datatables.bootstrap4.min.js"></script>
+}

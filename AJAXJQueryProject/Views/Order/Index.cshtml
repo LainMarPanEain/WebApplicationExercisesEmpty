@@ -1,0 +1,27 @@
+﻿<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<b>Welcome Home</b>
+<form>
+    <button id="btnRefresh">Refresh</button>
+    <label id="result">Current Time is: </label><h1 id="now"></h1>
+    <button id="btnHi">Bonjour</button>
+    <button id="btnThanks" onclick="SayThanks();">Gracias</button>
+</form>
+<script>
+    $(document).ready(function(){
+        $("#btnRefresh").click(function(event){
+            event.preventDefault();//if this not include, the data will not be displayed
+            var url = "/Order/TellMeDate";
+            $.get(url, null, function (data) {
+                $("#now").html(data);
+            });
+        });
+        $("#btnHi").click(function(){
+            alert("Bonjour");
+        });
+    });
+    function SayThanks(){
+        alert("Gracias");
+    }
+</script>

@@ -1,0 +1,29 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿﻿
+@model TablesViewModel
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<div class="container">
+    <h1>Tables Edit</h1>
+    <hr />
+    <form action="/tables/update" method="post">
+        <input type="hidden" name="Id" value="@Model.Id" />
+        <div class="mb-3">
+            <label class="form-label">Table Number</label>
+            <input class="form-control" type="number" name="No" required value="@Model.No" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="IsAvailable">Is Available</label>
+            <select class="form-control" id="IsAvailable" name="IsAvailable" value="IsAvailable">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Available Person</label>
+            <input class="form-control" type="number" name="AvailablePerson" required value="@Model.AvailablePerson" />
+        </div>
+
+        <input class="btn btn-success" type="submit" value="Update">
+    </form>
+</div>

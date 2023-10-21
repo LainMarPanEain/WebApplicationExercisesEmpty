@@ -1,0 +1,90 @@
+﻿<header>
+    <style>
+        h1 {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            display: block;
+            color: white;
+        }
+
+        form {
+            margin: 0 auto;
+            margin-top: 40px;
+            display: table;
+            grid-gap: 10px;
+        }
+
+        div {
+            display: table-row;
+        }
+
+        label, input[type=number], button {
+            display: table-cell;
+        }
+
+        input[type=number], button {
+            margin-left: 2px;
+        }
+    </style>
+</header>
+<script>
+    function fillInputData() {
+        if ("@ViewBag.SelectedSrcCurrency" != "") {
+            document.getElementById("srcCurrencyId").value = "@ViewBag.SelectedSrcCurrency";
+        }
+        if ("@ViewBag.SelectedDesCurrency" != "") {
+            document.getElementById("desCurrencyId").value = "@ViewBag.SelectedDesCurrency";
+        }
+        if ("@ViewBag.Amount" != 0) {
+            document.getElementById("amountId").value = "@ViewBag.Amount";
+        }
+    }
+</script>
+<body onload="fillInputData()">
+    <h1>Curreny Converter</h1>
+    <form action="/Converter/ChangeCurrencyVer2" method="post">
+        <div>
+            <label for="srcCurrency">Source Currency:</label>
+            <select id="srcCurrencyId" name="srcCurrency" placeholder="Select Source Currency">
+                <option value="MMK">MM Kyat</option>
+                <option value="USD">US Dollar</option>
+                <option value="BAHT">Thai Baht</option>
+                <option value="SGD">Sin Dollar</option>
+            </select>
+            <br>
+            <br>
+        </div>
+        <div>
+            <label for="desCurrency">Destination Currency:</label>
+            <select id="desCurrencyId" name="desCurrency" placeholder="Select Destination Currency">
+                <option value="MMK">MM Kyat</option>
+                <option value="USD">US Dollar</option>
+                <option value="BAHT">Thai Baht</option>
+                <option value="SGD">Sin Dollar</option>
+            </select>
+            <br>
+            <br>
+        </div>
+        <div>
+            <label for="amount">Amount:</label>
+            <input type="number" id="amountId" name="amount" autocomplete="off">
+            <br>
+            <br>
+        </div>
+        <div>
+            <label for="mmkResult">Result:</label>
+            <input type="number" id="mmkResult" name="mmkResult" readonly="true" value="@ViewBag.Result">
+            <!-- <label for="mmkResult">@ViewBag.Result</label> -->
+            <br>
+            <br>
+        </div>
+        <div>
+            <button type="submit" id="convert">Convert</button>
+            <button id="cancelBtn">Cancel</button>
+        </div>
+        
+    </form>
+</body>

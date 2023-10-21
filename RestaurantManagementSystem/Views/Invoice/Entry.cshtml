@@ -1,0 +1,60 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿﻿
+@model InvoiceViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <h1>New Invoice</h1>
+    <div class="text-success">
+        @if (ViewBag.Msg != null)
+        {
+            @ViewBag.Msg
+        }
+    </div>
+    <form action="/invoice/Entry" method="post">
+        <input type="hidden" name="OrderId" value="@Model.OrderId" /> <!--hidden value to update the record -->
+        <input type="hidden" name="TableId" value="@Model.TableId" /> <!--hidden value to update the record -->
+        <div class="mb-3">
+            <label class="form-label" for="No">Invoice Number:</label>
+            <input class="form-control" type="text" id="No" name="No" value="@Model.No" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="orderNo">Order Number:</label>
+            <input class="form-control" type="text" id="orderNo" name="orderNo" value="@Model.OrderNo" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="totalAmount">Total Amount:</label>
+            <input class="form-control" type="number" id="totalAmount" name="totalAmount" value="@Model.TotalAmount" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="paymentWith">Pay with:</label>
+            <select class="form-control" id="paymentWith" name="paymentWith" value="Payment">
+                <option value="KbzPay">KBZ Pay</option>
+                <option value="Cash">Cash</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="tableNo">Table Number:</label>
+            <input class="form-control" type="number" id="tableNo" name="tableNo" value="@Model.TableNo" readonly>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="employeeId">Cashier Employee:</label>
+            <select class="form-control" id="employee" name="employeeId">
+                @foreach (var e in @ViewBag.Employees)
+                {
+                    <option value="@e.Id">@e.Name</option>
+                }
+            </select>
+        </div>
+
+        <input class="btn btn-success" type="submit" value="Entry">
+    </form>
+</body>
+</html>

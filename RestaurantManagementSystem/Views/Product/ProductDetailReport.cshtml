@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Product Detail Report</h1>
+    <div class="text-success">
+        @if (ViewBag.Msg != null)
+        {
+            @ViewBag.Msg
+        }
+    </div>
+    <form action="/Product/ProductDetailReport" method="post" target="_blank">
+        <div class="mb-3">
+            <label class="form-label" for="FromCode">From Code: </label>
+            <select class="form-control" id="FromCode" name="FromCode" value="From Code">
+                @foreach (var e in ViewBag.FromCode)
+                {
+                    <option value="@e.Code">@e.Code</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="ToCode">To Code: </label>
+            <select class="form-control" id="ToCode" name="ToCode" value="To Code">
+                @foreach (var e in ViewBag.ToCode)
+                {
+                    <option value="@e.Code">@e.Code</option>
+                }
+            </select>
+        </div>
+        <input class="btn btn-success" type="submit" value="Show">
+        <input class="btn btn-success" type="reset" value="Cancel">
+    </form>
+</body>
+</html>

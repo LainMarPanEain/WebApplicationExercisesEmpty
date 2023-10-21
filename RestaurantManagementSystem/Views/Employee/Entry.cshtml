@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Add Employee</h1>
+    <div class="text-success">
+        @if (ViewBag.Msg != null)
+        {
+            @ViewBag.Msg
+        }
+    </div>
+    <form action="/Employee/Entry" method="post">
+        <div class="mb-3">
+            <label class="form-label" for="Code">Code:</label>
+            <input class="form-control" type="text" id="Code" name="Code" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Name">Name:</label>
+            <input class="form-control" type="text" id="Name" name="Name" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Position</label>
+            <select class="form-control" id="PositionId" name="PositionId">
+                @foreach (var position in @ViewBag.Positions)
+                {
+                    <option value="@position.Id">@position.Name</option>
+                }
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Nrc">NRC Number:</label>
+            <input class="form-control" type="text" id="Nrc" name="Nrc" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Email">Email:</label>
+            <input class="form-control" type="text" id="Email" name="Email" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Phone">Phone:</label>
+            <input class="form-control" type="text" id="Phone" name="Phone" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Address">Address:</label>
+            <input class="form-control" type="text" id="Address" name="Address" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="Gender">Gender</label>
+            <select class="form-control" id="Gender" name="Gender" value="Choose Gender">
+                <option value="Female">Female</option>
+                <option value="Male">Male</option>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="DOB">Date Of Birth:</label>
+            <input class="form-control" type="date" id="DOB" name="DOB" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label" for="JoinedDate">Start working date:</label>
+            <input class="form-control" type="date" id="JoinedDate" name="JoinedDate" required>
+        </div>
+
+        <input class="btn btn-success" type="submit" value="Entry">
+    </form>
+</body>
+</html>
+<script>
+    $("#DOB").on("change",function(){
+        var now = new Date();
+        var dob = new Date($("#DOB").val());
+        var age = now.getFullYear() - dob.getFullYear();
+        if(age<18){
+            alert("Must be above 18 years!")
+        }
+    });
+</script>

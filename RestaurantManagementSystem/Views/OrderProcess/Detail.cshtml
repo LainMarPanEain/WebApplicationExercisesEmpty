@@ -1,0 +1,79 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;
+@model OrderViewModel
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<body>
+    <h1>Detail View of Orders</h1>
+    <div class="text-success">
+        @if (ViewBag.Msg != null)
+        {
+            @ViewBag.Msg
+        }
+    </div>
+    <form action="/orderprocess/list" method="get">
+        <div class="mb-3">
+            <label class="form-label" for="Code">Order Number</label>
+            <input class="form-control" type="text" value="@Model.No" readonly>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="Code">Table Number</label>
+            <input class="form-control" type="number" value="@Model.TableNo" readonly>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="Code">Is Parcel</label>
+            <input class="form-control" type="text" value="@Model.IsParcel" readonly>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="Name">Employee Number</label>
+            <input class="form-control" type="text" value="@Model.EmployeeNo" readonly>
+        </div>
+        <input class="btn btn-success" type="submit" value="Close">
+    </form>
+    <div class="mb-3">
+        <table class="table" id="detailTable">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product Number</th>
+                    <th scope="col">Product Name</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Remark</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int index = 1;
+                }
+                @foreach (var item in Model.OrderDetails)
+                {
+                    decimal total = 0;
+                    var quantity = item.Quantity;
+                    foreach (var p in item.Products)
+                    {
+
+                        total = quantity * p.Price;
+                        <tr>
+                            <th scope="row">@index</th>
+                            <td>@p.Code</td>
+                            <td>@p.Name</td>
+                            <td>@p.Category.Name</td>
+                            <td>@item.Remark</td>
+                            <td>@quantity</td>
+                            <td>@p.Price</td>
+                            <td>@total</td>
+                        </tr>
+                        index++;
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>

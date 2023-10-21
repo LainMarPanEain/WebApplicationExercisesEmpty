@@ -1,0 +1,8 @@
+﻿<b>This is my photo</b>
+<img src="ProfileCartoon.jpg" />
+<ul>
+	@foreach (string s in ViewBag.photos as string[])
+	{
+		<li>@s</li>
+	}
+</ul>

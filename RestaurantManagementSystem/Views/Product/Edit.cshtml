@@ -1,0 +1,51 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿
+@model ProductViewModel
+<head>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+</head>
+<div class="container">
+    <h1>Product Edit</h1>
+    <hr />
+    <form action="/product/Update" method="post">
+        <input type="hidden" name="Id" value="@Model.Id" /> <!--hidden value to update the record -->
+        <div class="mb-3">
+            <label class="form-label">Code</label>
+            <input class="form-control" type="text" name="Code" required value="@Model.Code" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input class="form-control" type="text" name="Name" required value="@Model.Name" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-control" id="CategoryId" name="CategoryId">
+                @foreach (var category in @ViewBag.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">UnitPrice</label>
+            <input class="form-control" type="number" name="Price" required value="@Model.Price" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Today Special</label>
+            @*   @if (Model.IsTodaySpecial.Equals("y")) {
+            <option value="y">Yes</option>
+            }*@
+            <select class="form-control" name="IsTodaySpecial">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Is Available</label>
+            <select class="form-control" name="IsAvailable">
+                <option value="yes">Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        <input class="btn btn-success" type="submit" value="Update">
+    </form>
+</div>

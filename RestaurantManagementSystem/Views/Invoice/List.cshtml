@@ -1,0 +1,72 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿﻿
+
+@model IQueryable<InvoiceViewModel>
+<head>
+    <link href="~/lib/datatables/css/datatables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/lib/datatables/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<h1>Invoice Information </h1>
+<hr />
+@if (TempData["Msg"] != null)
+{
+    <div class="text-info">
+        <b>@TempData["Msg"] </b>
+    </div>
+}
+<table class="table" id="invoiceTable">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Invoice Number</th>
+            <th scope="col">Order Number</th>
+            <!--<th scope="col">Table Number</th> -->
+            <th scope="col">Payment With</th>
+            <th scope="col">Total Ammount</th>
+            <th scope="col">Employee</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th scope="col">Actions</th>
+            }
+
+
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int index = 1;
+        }
+        @foreach (var invoice in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@invoice.No</td>
+                <td>@invoice.OrderNo</td>
+                
+                <td>@invoice.PaymentWith</td>
+                <td>@invoice.TotalAmount</td>
+                <td>@invoice.Employee.Name</td>
+                @if (User.IsInRole("Admin"))
+                {
+                    <td>
+                        <a href="/invoice/edit?Id=@invoice.Id" class="btn btn-success" role="button">edit</a>
+                        <a href="/invoice/delete?Id=@invoice.Id" onclick=" return confirm('are you sure to delete this record?');" class="btn btn-danger" role="button">delete</a>
+                    </td>
+                }
+
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>
+<script>
+    $(document).ready(function () {
+        $("#invoiceTable").dataTable();
+    });
+
+</script>
+@section Scripts{
+    <script src="~/lib/datatables.net/jquery.datatables.min.js"></script>
+    <script src="~/lib/datatables/js/datatables.bootstrap4.min.js"></script>
+}

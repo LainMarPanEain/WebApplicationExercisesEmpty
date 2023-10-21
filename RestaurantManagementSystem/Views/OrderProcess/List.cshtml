@@ -1,0 +1,369 @@
+﻿@using RestaurantManagementSystem.Models.ViewModels;﻿﻿
+@model IList<OrderViewModel>
+<head>
+    <link href="~/lib/datatables/css/datatables.bootstrap4.css" rel="stylesheet" />
+    <link href="~/lib/datatables/css/datatables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<h1>Order Information </h1>
+<hr />
+@if (TempData["Msg"] != null)
+{
+    <div class="text-info">
+        <b>@TempData["Msg"] </b>
+    </div>
+}
+<button style="margin-right:5px" id="newOderBtn" class="btn btn-primary pull-right">New Order</button>
+<table class="table" id="orderTable">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Order Number</th>
+            <th scope="col">Parcel</th>
+            <th scope="col">Status</th>
+            <th scope="col">Table</th>
+            <th scope="col">Employee</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            int index = 1;
+        }
+        @foreach (var item in Model)
+        {
+            <tr>
+                <th scope="row">@index</th>
+                <td>@item.No</td>
+                <td>@item.IsParcel</td>
+                <td>@item.Status</td>
+                <td>@item.Table.No</td>
+                <td>@item.Employee.Name</td>
+                <td>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a href="/Invoice/Entry?OrderId=@item.Id" class="btn btn-success" role="button">Make Payment</a>
+                    }
+                    <a href="/orderProcess/detail?Id=@item.Id" class="btn btn-success" role="button">Detail</a>
+                    <a href="/orderProcess/edit?Id=@item.Id" class="btn btn-success" role="button">Edit</a>
+                    <a href="/orderProcess/delete?Id=@item.Id" onclick=" return confirm('are you sure to delete this record?');" class="btn btn-danger" role="button">delete</a>
+                </td>
+            </tr>
+            index++;
+        }
+    </tbody>
+</table>
+<div id="newOrderModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">New Order Information</h2>
+            </div>
+            <div class="modal-body">
+                <h3>Order Master</h3>
+                <div class="form-horizontal">
+                    <input type="hidden" id="orderMasterId"/>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label class="control-label col-md-2">Order No</label>
+                            <input type="text" id="txtOrderNo" placeholder="Order Number" class="form-control"/>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label col-md-2">Is Parcel</label>
+                            <select id="txtIsParcel" class="form-control">
+                                <option value="Yes">Yes</option>
+                                <option value="No">No</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label col-md-2">Status</label>
+                            <select id="txtStatus" class="form-control">
+                                <option value="InProgress">In Progress</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Canceled">Canceled</option>
+                                <option value="Finished">Finished</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label col-md-2">Table</label>
+                            <select class="form-control" id="txtTableId">
+                                @foreach(var t in ViewBag.Tables)
+                                {
+                                    <option value="@t.Id">@t.No</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="control-label col-md-2">Employee</label>
+                            <select class="form-control" id="txtEmployeeId">
+                                @foreach (var e in ViewBag.Employees)
+                                {
+                                    <option value="@e.Id">@e.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 style="margin-top:10px">Order Details</h3>
+            <table id="detailsTable" class="Table">
+                <thead>
+                    <tr>
+                        <th style="visibility:hidden">ProductId</th>
+                        <th style="width:30%">Product</th>
+                        <th style="width:15%">Price</th>
+                        <th style="width:15%">Quantity</th>
+                        <th style="width:15%">Total Amount</th>
+                        <th style="width:20%">Remarks</th>
+                        <th style="width:5%">Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td style="visibility:hidden"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <a class="btn btn-info" id="btnAddDetail">Add Detail</a>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="modal-footer">
+                <button id="closeModal" type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                <button id="saveOrder" type="button" class="btn btn-primary">Make Order</button>
+            </div>
+            <!--stat order detail model popup-->
+            <div id="orderDetailsModal" class="modal fade" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="btnOrderDetailClose"><span aria-hidden="true">&times;</span></button>
+                            <h4 class="modal-title">Order Details</h4>
+                        </div>
+
+                        <div class="modal-body">
+                            <div class="form-horizontal">
+                                <div class="form-group">
+                                    <input type="hidden" id="detailId" />
+                                    <div class="col-md-6">
+                                        <label class="control-label col-md-3"> Product Name</label>
+                                        <select class="form-control" id="txtProductId">
+                                            @foreach (var p in ViewBag.Products)
+                                            {
+                                                <option value="@p.Id">@p.Name</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label col-md-3">Unit Price</label>
+                                        <input type="number" id="txtUnitPrice" placeholder="Product Price" class="form-control" required readonly />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label col-md-2">Quanity </label>
+                                        <input type="number" id="txtQty" placeholder="Quantity" class="form-control" required />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="control-label col-md-3"> Remark </label>
+                                        <input type="text" id="txtRemark" placeholder="Product Remark" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-md-3 col-lg-offset-9">
+                                        <a id="addToList" class="btn btn-primary">Add To List</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+ 
+    $(document).ready(function () {
+        $("#newOderBtn").click(function (e) {
+            e.preventDefault();
+            $("#txtOrderNo").val('');
+            $("#txtIsParcel").val('');
+            $("#txtStatus").val('');
+            $("#txtTableId").val('');
+            $("#txtEmployeeId").val('');
+            $("#detailsTable tbody tr").remove();//reseting table
+            $("#saveOrder").html("Make Order");
+            $("#newOrderModal").modal('show');
+            
+        });
+        $("#closeModal").click(function () {
+            $("#newOrderModal").modal('hide');
+        });
+
+        $("#btnAddDetail").click(function (e) {
+            e.preventDefault();
+            $("#orderDetailsModal").modal('show');
+        });
+
+        $("#addToList").click(function (e) {
+            e.preventDefault();
+            //getting the product info
+            var productId = $("#txtProductId").val(),
+                ProductName = $("#txtProductId option:selected").text(),
+                UnitPrice = $.trim($("#txtUnitPrice").val()),
+                quantity = $.trim($("#txtQty").val()),
+                remark = $.trim($("#txtRemark").val());
+            //checking the validation for product
+            if (productId == "" || UnitPrice == "" || quantity == "") {
+                alert("Require product information!!");
+                return;
+            }
+            //get the table body only
+            var detailsTableBody = $("#detailsTable tbody");
+            debugger;
+            //appending the data to the table body
+            var productItem = '<tr><td style="visibility:hidden">' + productId + '</td><td>' + ProductName + '</td><td>' + UnitPrice + '</td><td>' + quantity + '</td><td>' + (parseFloat(UnitPrice) * parseInt(quantity)) + '</td><td>' + remark + '</td><td>' + '</td><td><a data-itemId="0" href="#" class="deleteItem">Remove</a></td></tr>';
+            detailsTableBody.append(productItem);
+
+            clearItem();//method called to clear for selected product information.
+            $('#orderDetailsModal').modal('hide');
+        });//end of addToList click function.
+
+        //clear function for clearItem();
+        function clearItem() {
+            $("#txtProductId").val('');
+            $("#txtUnitPrice").val('');
+            $("#txtQty").val('');
+            $("#txtRemark").val('');
+        }
+
+        $("#saveOrder").click(function (e) {
+            e.preventDefault();
+            var orderDetails = [];//declare the array for orderDetails
+            orderDetails.length = 0;//set the length =0
+
+            $.each($("#detailsTable tbody tr"), function () {
+                orderDetails.push({
+                    'ProductId': $(this).find('td:eq(0)').html(),
+                    'Quantity': $(this).find('td:eq(3)').html(),
+                    'Remark': $(this).find('td:eq(4)').html(),
+                });
+            });
+
+            var AnOrder = {};//create a order object to send the data to the controller
+            AnOrder.No = $.trim($("#txtOrderNo").val());//1 getting the value from the text box
+            AnOrder.IsParcel = $("#txtIsParcel").val();//30 getting the value from the text box
+            AnOrder.Status = $("#txtStatus").val();//Accepted getting the value from the text box
+            AnOrder.TableId = $("#txtTableId").val();//t1 getting the value from the text box
+            AnOrder.EmployeeId = $("#txtEmployeeId").val();//e1 getting the value from the text box
+            AnOrder.orderDetails = orderDetails;
+            //make saveOrder  to the Controller
+            $.ajax({
+                type: 'POST',
+                url: '/orderprocess/entry',
+                data: AnOrder,
+                success: function (response) {
+                    alert('success');
+                    $('#newOrderModal').modal('hide');//Closing newOrderModal  popup
+                    window.location.assign("/orderprocess/list");
+                },
+                error: function (xhr) {
+                    console.log(xhr.responseText);
+                    alert("Error has occurred..");
+                }
+            });
+        });//end of  saveOrder click
+
+        $(document).on('click', 'a.deleteItem', function (e) {
+            e.preventDefault();
+            var $self = $(this);
+            if ($(this).attr('data-itemId') == "0") {
+                $(this).parents('tr').css("background-color", "#FF3700").fadeOut(800, function () {
+                    $(this).remove();
+                });
+            } else {
+                $.when(deleteOrderItem($(this).attr('data-itemId'))).then(function (res) {
+                    $self.parents('tr').css("background-color", "#FF3700").fadeOut(800, function () {
+                        $(this).remove();
+                    });
+                }).fail(function (err) {
+
+                });
+            }
+        });
+        $(document).on("click", '.editItem', function (e) {
+            var data = table.row($(this).parents('tr')).data();
+            e.preventDefault();
+            var id = data.masterId;
+            $.when(getOrder(id)).then(function (res) {
+                var detArr = [];
+                $("#customerName").val(res.result.CustomerName);
+                $("#address").val(res.result.Address);
+                $("#orderMasterId").val(res.result.MasterId);
+
+                $.each(res.result.OrderDetails, function (i, v) {
+                    detArr.push('<tr><td>' + v.ProductName + '</td><td>' + v.Amount + '</td><td>' + v.Quantity + '</td><td>' + (parseFloat(v.Amount) * parseInt(v.Quantity)) + '</td><td><a data-itemId="' + v.DetailId + '" href="#" class="deleteItem">Delete</a> | <a href="#" data-itemId="' + v.DetailId + '" class="editDetail">Edit</a></td></tr>')
+                });
+                $("#detailsTable tbody").append(detArr);
+                $("#saveOrder").html("Save Update");
+                $('#newOrderModal').modal('show');
+
+            }).fail(function (err) {
+                console.log(err);
+            });
+        });
+
+        $(document).on("click", '.editDetail', function (e) {
+
+            e.preventDefault();
+            var id = $(this).attr("data-itemid");
+
+            $.when(getSingleOrderDetail(id)).then(function (res) {
+                var detArr = [],
+                    data = res.result;
+                $("#detailId").val(data.DetailId);
+                $("#productName").val(data.ProductName);
+                $("#price").val(data.Amount);
+                $("#quantity").val(data.Quantity);
+
+                $('#orderDetailsModal').modal('show');
+
+            }).fail(function (err) {
+                console.log(err);
+            });
+        });
+        //drop down option
+        $("#txtProductId").change(function () {
+            $.ajax({
+                type: 'get',
+                url: '/OrderProcess/GetUnitPriceByProductId',
+                dataType: 'json',
+                data: { id: $("#txtProductId").val() },
+                success: function (data) {
+                    var unitPrice = JSON.stringify(data);
+                    $("#txtUnitPrice").val(unitPrice);
+                },
+                error: function (ex) {
+                    var r = jQuery.parseJSON(response.responseText);
+                    alert("Message: " + r.Message);
+                    alert("StackTrace: " + r.StackTrace);
+                    alert("ExceptionType: " + r.ExceptionType);
+                }
+            });
+        });
+
+        $("#orderTable").dataTable();
+    });
+
+</script>
+@section Scripts{
+    <script src="~/lib/datatables.net/jquery.datatables.min.js"></script>
+    <script src="~/lib/datatables/js/datatables.bootstrap4.min.js"></script>
+}
